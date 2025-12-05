@@ -21,15 +21,17 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Models
         [Required]
         public string Phone { get; set; }
 
+        // Returns the list of users who can approve this restaurant
         public List<string> GetValidators()
         {
 
             return new List<string> { "adminjeanpaul@mcast.com" };
         }
 
+        // Returns the partial view name used to display this restaurant
         public string GetCardPartial()
         {
-            return "_CardRestaurant";
+            return "_CardItemRestaurant";
         }
     }
 

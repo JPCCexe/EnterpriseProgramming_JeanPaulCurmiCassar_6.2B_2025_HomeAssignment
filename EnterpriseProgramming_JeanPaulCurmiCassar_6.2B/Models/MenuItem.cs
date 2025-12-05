@@ -26,6 +26,7 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Models
 
         public Restaurant Restaurant { get; set; }
 
+        // Returns the list of email addresses allowed to approve this menu item
         public List<string> GetValidators()
         {
             if (Restaurant != null)
@@ -38,6 +39,7 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Models
             }
         }
 
+        // Returns the partial view name used to display this menu item
         public string GetCardPartial()
         {
             return "_MenuItemCard";
