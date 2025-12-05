@@ -1,7 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Domain.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Models
+namespace Domain.Models
 {
     public class MenuItem : IItemValidating
     {
