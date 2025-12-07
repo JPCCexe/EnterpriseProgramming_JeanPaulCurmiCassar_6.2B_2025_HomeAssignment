@@ -24,7 +24,6 @@ namespace Domain.Models
         // Returns the list of users who can approve this restaurant
         public List<string> GetValidators()
         {
-
             return new List<string> { "adminjeanpaul@mcast.com" };
         }
 

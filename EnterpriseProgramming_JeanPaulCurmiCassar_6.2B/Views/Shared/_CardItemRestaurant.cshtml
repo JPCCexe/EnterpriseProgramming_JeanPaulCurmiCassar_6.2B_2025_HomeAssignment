@@ -1,0 +1,31 @@
+﻿@model Domain.Models.Restaurant
+
+<div class="card h-100 shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title text-primary">@Model.Name</h5>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="text-muted small">@Model.Description</p>
+        }
+
+        <p class="mb-1">
+            <strong>Owner:</strong> @Model.OwnerEmailAddress
+        </p>
+
+        <p class="mb-1">
+            <strong>Phone:</strong> @Model.Phone
+        </p>
+
+        @if (!string.IsNullOrEmpty(Model.Address))
+        {
+            <p class="mb-1">
+                <strong>Address:</strong> @Model.Address
+            </p>
+        }
+
+        <span class="badge bg-@(Model.Status == "Approved" ? "success" : "warning")">
+            @Model.Status
+        </span>
+    </div>
+</div>

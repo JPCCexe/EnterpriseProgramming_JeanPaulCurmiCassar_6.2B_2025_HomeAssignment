@@ -63,6 +63,22 @@ namespace DataAccess.Repositories
                 _context.SaveChanges();
             }
         }
+
+        //Used to approve multiple MenuItmes by ID
+        public void Approve(List<Guid> ids)
+        {
+            var menuItems = _context.MenuItems
+                .Where(m => ids.Contains(m.Id))
+                .ToList();
+
+            foreach (var menuItem in menuItems)
+            {
+                menuItem.Status = "Approved";
+            }
+
+            _context.SaveChanges();
+
+        }
     }
 }
 

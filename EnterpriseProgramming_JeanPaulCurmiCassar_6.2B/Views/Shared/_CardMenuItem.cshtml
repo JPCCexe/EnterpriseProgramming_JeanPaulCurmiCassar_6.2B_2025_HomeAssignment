@@ -1,12 +1,18 @@
 ﻿@model Domain.Models.MenuItem
 
 <div class="list-group-item">
-    <div class="d-flex w-100 justify-content-between">
-        <h5 class="mb-1">@Model.Title</h5>
-        <strong>@Model.Price @Model.Currency</strong>
+    <div class="d-flex w-100 justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-1">@Model.Title</h5>
+            <small class="text-muted">
+                Restaurant: @(Model.Restaurant?.Name ?? "N/A")
+            </small>
+        </div>
+        <div class="text-end">
+            <h5 class="text-success mb-0">@Model.Price.ToString("F2") @Model.Currency</h5>
+            <span class="badge bg-@(Model.Status == "Approved" ? "success" : "warning") mt-1">
+                @Model.Status
+            </span>
+        </div>
     </div>
-    <p class="mb-1">
-        <small class="text-muted">Restaurant: @Model.Restaurant?.Name</small>
-    </p>
-    <small class="text-muted">Status: @Model.Status</small>
 </div>

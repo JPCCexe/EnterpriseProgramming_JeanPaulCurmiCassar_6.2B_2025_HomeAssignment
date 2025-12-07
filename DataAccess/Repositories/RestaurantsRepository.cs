@@ -62,5 +62,20 @@ namespace DataAccess.Repositories
                 _context.SaveChanges();
             }
         }
+
+        //used to approve multiple restaurants by id
+        public void Approve(List<int> ids)
+        {
+            var restaurants = _context.Restaurants
+                .Where(r => ids.Contains(r.Id))
+                .ToList();
+
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.Status = "Approved";
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
