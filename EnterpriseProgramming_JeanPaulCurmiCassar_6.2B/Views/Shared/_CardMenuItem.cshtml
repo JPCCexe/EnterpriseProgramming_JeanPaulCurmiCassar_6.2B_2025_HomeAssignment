@@ -1,0 +1,12 @@
+﻿@model Domain.Models.MenuItem
+
+<div class="list-group-item">
+    <div class="d-flex w-100 justify-content-between">
+        <h5 class="mb-1">@Model.Title</h5>
+        <strong>@Model.Price @Model.Currency</strong>
+    </div>
+    <p class="mb-1">
+        <small class="text-muted">Restaurant: @Model.Restaurant?.Name</small>
+    </p>
+    <small class="text-muted">Status: @Model.Status</small>
+</div>

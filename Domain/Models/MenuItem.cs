@@ -13,21 +13,12 @@ namespace Domain.Models
     {
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
-
-        [Required]
-        [StringLength(100)]
         public string Title { get; set; }
-
-        [Required]
         public float Price { get; set; }
 
-        [Required]
-        [ForeignKey("Restaurant")]
+        [ForeignKey("RestaurantFK")]
         public int RestaurantId { get; set; }
-
-        [Required]
         public string Status { get; set; }
-        [Required]
         public string Currency { get; set; }
 
         public Restaurant Restaurant { get; set; }
@@ -48,7 +39,7 @@ namespace Domain.Models
         // Returns the partial view name used to display this menu item
         public string GetCardPartial()
         {
-            return "_MenuItemCard";
+            return "_CardMenuItem";
         }
     }
 }

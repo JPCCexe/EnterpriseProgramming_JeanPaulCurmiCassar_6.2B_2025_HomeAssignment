@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Domain.Interfaces.IItemValidating>
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+
+<div class="container mt-4">
+    <h2>Catalog</h2>
+
+    <!-- Navigation buttons -->
+    <div class="mb-3">
+        <a asp-action="Catalog" asp-route-type="restaurant" asp-route-view="card"
+           class="btn btn-primary">View Restaurants (Card)</a>
+        <a asp-action="Catalog" asp-route-type="menuitem" asp-route-view="list"
+           class="btn btn-secondary">View Menu Items (List)</a>
+    </div>
+
+    @if (ViewBag.ViewType == "card")
+    {
+        <!-- Card View for Restaurants -->
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-3">
+                    <partial name="@item.GetCardPartial()" model="item" />
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <!-- List View for Menu Items -->
+        <div class="list-group">
+            @foreach (var item in Model)
+            {
+                <partial name="@item.GetCardPartial()" model="item" />
+            }
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            No approved items found.
+        </div>
+    }
+</div>

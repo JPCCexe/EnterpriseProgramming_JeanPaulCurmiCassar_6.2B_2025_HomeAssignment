@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,22 +11,15 @@ namespace Domain.Models
 {
     public class Restaurant : IItemValidating
     {
-        [Key]
+        //[Key]
+        [Key(), DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [Required]
-        [StringLength(100)]
         public string Name { get; set; }
-
-        [Required]
-        [StringLength(255)]
         public string OwnerEmailAddress { get; set; }
-
-        [Required]
         public string Status { get; set; }
-
-        [Required]
         public string Phone { get; set; }
+        public string Address { get; set; }
+        public string Description { get; set; }
 
         // Returns the list of users who can approve this restaurant
         public List<string> GetValidators()
