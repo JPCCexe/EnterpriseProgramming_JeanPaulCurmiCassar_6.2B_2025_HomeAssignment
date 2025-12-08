@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Bulk Import Data";
+}
+
+<div class="container mt-4">
+    <h2>Bulk Import Data For Restaurants & Menu Items</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="BulkImport" method="post">
+                <div class="mb-3">
+                    <label for="json" class="form-label">Paste JSON Data:</label>
+                    <textarea class="form-control" id="json" name="jsonData" rows="15"
+                              placeholder='Paste your JSON here or leave empty to use sample data...'></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Parse & Preview</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <h5>Sample JSON Format:</h5>
+        <pre class="bg-light p-3">
+
+            [
+  {
+    "type": "restaurant",
+    "name": "Trattoria Luca",
+    "description": "Pasta & grill",
+    "ownerEmailAddress": "luca@example.com",
+    "address": "123 Harbor Road",
+    "phone": "+356 1234 5678"
+  },
+  {
+    "type": "menuItem",
+    "title": "Tagliatelle",
+    "price": 11.50,
+    "currency": "EUR"
+  }
+]
+
+        </pre>
+    </div>
+</div>

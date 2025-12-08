@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Domain.Interfaces.IItemValidating>
+
+@{
+    ViewData["Title"] = "Preview Imported Items";
+}
+
+<div class="container mt-4">
+    <h2>Preview Imported Items</h2>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">
+            @ViewBag.Message
+        </div>
+    }
+
+    <div class="alert alert-info">
+        <strong>Note:</strong> These items are NOT saved to the database yet.
+        This is just a preview of the parsed data.
+    </div>
+
+    <h4>Parsed Items:</h4>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-3">
+                @if (item is Domain.Models.Restaurant)
+                {
+                    var restaurant = item as Domain.Models.Restaurant;
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            Restaurant
+                        </div>
+                        <div class="card-body">
+                            <h5>@restaurant.Name</h5>
+                            <p><strong>Owner:</strong> @restaurant.OwnerEmailAddress</p>
+                            <p><strong>Phone:</strong> @restaurant.Phone</p>
+                            <p><strong>Address:</strong> @restaurant.Address</p>
+                            <p><strong>Status:</strong> <span class="badge bg-warning">@restaurant.Status</span></p>
+                        </div>
+                    </div>
+                }
+                else if (item is Domain.Models.MenuItem)
+                {
+                    var menuItem = item as Domain.Models.MenuItem;
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            Menu Item
+                        </div>
+                        <div class="card-body">
+                            <h5>@menuItem.Title</h5>
+                            <p><strong>Price:</strong> @menuItem.Price @menuItem.Currency</p>
+                            <p><strong>Status:</strong> <span class="badge bg-warning">@menuItem.Status</span></p>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <a asp-action="BulkImport" class="btn btn-secondary">Upload New JSON</a>
+</div>
