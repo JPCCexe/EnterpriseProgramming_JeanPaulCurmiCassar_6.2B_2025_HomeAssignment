@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Commit to Database";
+}
+
+<div class="container mt-4">
+    <h2>Commit Items to Database</h2>
+
+    @if (TempData["error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["error"]</div>
+    }
+
+    <div class="alert alert-info">
+        <strong>Instructions:</strong>
+        <ol>
+            <li>Download the ZIP file from the preview page</li>
+            <li>Extract the ZIP</li>
+            <li>Replace default.jpg in each folder with your actual images</li>
+            <li>Re-zip all folders</li>
+            <li>Upload the ZIP below</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Commit" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="zipFile" class="form-label">Upload ZIP with Images:</label>
+                    <input type="file" class="form-control" id="zipFile" name="zipFile" accept=".zip" required />
+                </div>
+
+                <button type="submit" class="btn btn-success">Commit to Database</button>
+                <a asp-action="BulkImport" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

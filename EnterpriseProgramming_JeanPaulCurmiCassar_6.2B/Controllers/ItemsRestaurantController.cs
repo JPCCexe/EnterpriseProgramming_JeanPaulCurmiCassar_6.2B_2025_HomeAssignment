@@ -87,5 +87,39 @@ namespace Presentation.Controllers
             return RedirectToAction("Pending", new { type = type, view = "card" });
         }
 
+
+        //Show approved restaurants from database with images
+        [HttpGet]
+        public IActionResult ApprovedRestaurants()
+        {
+            //Get approved restaurants from database
+            var restaurants = _restaurantsRepository.Get()
+                .Where(r => r.Status == "Approved")
+                .ToList();
+
+            ViewBag.ViewType = "card";
+            ViewBag.ItemType = "restaurant";
+            return View("Catalog", restaurants.Cast<IItemValidating>().ToList());
+        }
+
+        //Show menu items for a specific restaurant
+        [HttpGet]
+        public IActionResult RestaurantMenu(int id)
+        {
+            //Get approved menu items for this restaurant
+            var menuItems = _menuItemsRepository.Get()
+                .Where(m => m.RestaurantId == id && m.Status == "Approved")
+                .ToList();
+
+            //Get restaurant name for display
+            var restaurant = _restaurantsRepository.Get(id);
+
+            ViewBag.ViewType = "list";
+            ViewBag.ItemType = "menuitem";
+            ViewBag.RestaurantName = restaurant?.Name ?? "Restaurant";
+
+            return View("Catalog", menuItems.Cast<IItemValidating>().ToList());
+        }
+
     }
 }

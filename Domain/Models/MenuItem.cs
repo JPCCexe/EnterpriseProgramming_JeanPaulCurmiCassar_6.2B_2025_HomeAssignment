@@ -23,6 +23,8 @@ namespace Domain.Models
 
         public Restaurant Restaurant { get; set; }
 
+        public string? ImagePath { get; set; }
+
         // Returns the list of email addresses allowed to approve this menu item
         public List<string> GetValidators()
         {

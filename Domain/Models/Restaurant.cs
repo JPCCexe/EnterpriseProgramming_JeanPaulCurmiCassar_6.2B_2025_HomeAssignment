@@ -21,6 +21,8 @@ namespace Domain.Models
         public string Address { get; set; }
         public string Description { get; set; }
 
+        public string? ImagePath { get; set; }
+
         // Returns the list of users who can approve this restaurant
         public List<string> GetValidators()
         {

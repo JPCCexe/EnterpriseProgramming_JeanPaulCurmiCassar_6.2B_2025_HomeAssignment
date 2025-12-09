@@ -31,19 +31,43 @@ namespace DataAccess.Context
             return items;
         }
 
+        //Get approved restaurants only
+        public List<Restaurant> GetApprovedRestaurants()
+        {
+            return _context.Restaurants.Where(r => r.Status == "Approved").ToList();
+        }
+
+        //Get approved menu items for a specific restaurant
+        public List<MenuItem> GetApprovedMenuItems(int restaurantId)
+        {
+            return _context.MenuItems
+                .Where(m => m.RestaurantId == restaurantId && m.Status == "Approved")
+                .ToList();
+        }
+
         //Saving the items to the database
         public void Save(List<IItemValidating> items)
         {
-            foreach (var item in items)
+            //First, save all restaurants and get their IDs
+            var restaurants = items.OfType<Restaurant>().ToList();
+            foreach (var restaurant in restaurants)
             {
-                if (item is Restaurant restaurant)
+                _context.Restaurants.Add(restaurant);
+            }
+            //SaveChanges assigns real IDs to restaurants
+            _context.SaveChanges(); 
+
+            //Now saving menu items
+            var menuItems = items.OfType<MenuItem>().ToList();
+
+            //For now, just set RestaurantId to first restaurant's ID for testing
+            foreach (var menuItem in menuItems)
+            {
+                if (menuItem.RestaurantId == 0 && restaurants.Any())
                 {
-                    _context.Restaurants.Add(restaurant);
+                    menuItem.RestaurantId = restaurants.First().Id;
                 }
-                else if (item is MenuItem menuItem)
-                {
-                    _context.MenuItems.Add(menuItem);
-                }
+                _context.MenuItems.Add(menuItem);
             }
             _context.SaveChanges();
         }
