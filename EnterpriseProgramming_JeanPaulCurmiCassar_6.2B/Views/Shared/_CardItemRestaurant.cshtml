@@ -1,30 +1,18 @@
 ﻿@model Domain.Models.Restaurant
 
-<div class="card h-100 shadow-sm">
+<div class="card">
     @if (!string.IsNullOrEmpty(Model.ImagePath))
     {
-        <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Name" style="height: 180px; object-fit: cover;">
+        <img src="@Model.ImagePath" class="card-img-top" alt="@Model.Name">
     }
     <div class="card-body">
-        <h5 class="card-title text-primary">@Model.Name</h5>
-
-        @if (!string.IsNullOrEmpty(Model.Description))
-        {
-            <p class="text-muted small">@Model.Description</p>
-        }
-
-        <p class="mb-1"><strong>Owner:</strong> @Model.OwnerEmailAddress</p>
-        <p class="mb-1"><strong>Phone:</strong> @Model.Phone</p>
-
-        @if (!string.IsNullOrEmpty(Model.Address))
-        {
-            <p class="mb-1"><strong>Address:</strong> @Model.Address</p>
-        }
-
-        <span class="badge bg-@(Model.Status == "Approved" ? "success" : "warning")">@Model.Status</span>
-    </div>
-    <div class="card-footer">
+        <h5>@Model.Name</h5>
+        <p>@Model.Description</p>
+        <p><strong>Owner:</strong> @Model.OwnerEmailAddress</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+        <p><strong>Address:</strong> @Model.Address</p>
+        <p><span class="badge bg-success">@Model.Status</span></p>
         <a asp-controller="ItemsRestaurant" asp-action="RestaurantMenu" asp-route-id="@Model.Id"
-           class="btn btn-primary btn-sm w-100">View Menu Items</a>
+           class="btn btn-primary">View Menu</a>
     </div>
 </div>

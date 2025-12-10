@@ -185,7 +185,7 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Controllers
 
                     if (imageFiles.Length > 0)
                     {
-                        //Copy image to wwwroot/images with unique name
+                        
                         string originalFile = imageFiles[0];
                         string uniqueName = $"{Guid.NewGuid().ToString().Substring(0, 8)}{Path.GetExtension(originalFile)}";
                         string destinationPath = Path.Combine(_env.WebRootPath, "images", uniqueName);

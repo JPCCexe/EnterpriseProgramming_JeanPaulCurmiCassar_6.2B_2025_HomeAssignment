@@ -1,8 +1,30 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-5">
+    <h1 class="display-4">Restaurant Management System</h1>
+    <p class="lead mt-3">Welcome to the Enterprise Programming Assignment</p>
+
+    <div class="mt-5">
+        <a asp-controller="ItemsRestaurant" asp-action="ApprovedRestaurants"
+           class="btn btn-primary btn-lg me-3">
+            View Catalog
+        </a>
+
+        <a asp-controller="BulkImport" asp-action="BulkImport"
+           class="btn btn-secondary btn-lg">
+            Bulk Import
+        </a>
+    </div>
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="mt-4">
+            <a asp-controller="ItemsRestaurant" asp-action="Verification"
+               class="btn btn-success btn-lg">
+                Go to Verification
+            </a>
+        </div>
+    }
 </div>

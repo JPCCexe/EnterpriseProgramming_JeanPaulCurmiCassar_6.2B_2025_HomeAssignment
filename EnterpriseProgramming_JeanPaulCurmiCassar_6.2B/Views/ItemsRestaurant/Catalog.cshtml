@@ -7,7 +7,20 @@
 }
 
 <div class="container mt-4">
-    <h2>Catalog</h2>
+    <h2>
+        @if (ViewBag.UserRole != null)
+        {
+            <span>@ViewBag.UserRole - </span>
+        }
+        @if (ViewBag.IsApprovalMode == true)
+        {
+            <span>Pending Approvals</span>
+        }
+        else
+        {
+            <span>Catalog</span>
+        }
+    </h2>
 
     @if (!isApprovalMode)
     {

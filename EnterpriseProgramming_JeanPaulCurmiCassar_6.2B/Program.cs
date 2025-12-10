@@ -3,6 +3,7 @@ using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
 using EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Data;
+using EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Filters;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,8 +29,10 @@ builder.Services.AddKeyedScoped<IItemsRepository, ItemsDbRepository>("db");
 //Adding the memory cache for in-memory repository
 builder.Services.AddMemoryCache();
 
-var app = builder.Build();
+//used to register the filter
+builder.Services.AddScoped<FiltersValidations>();
 
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
