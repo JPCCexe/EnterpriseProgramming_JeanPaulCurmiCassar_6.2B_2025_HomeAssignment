@@ -17,60 +17,53 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Filters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            // checking if the use is logged in
+            // checking if the user is logged in
             string userEmail = context.HttpContext.User.Identity?.Name;
 
             if (string.IsNullOrEmpty(userEmail))
             {
+                //If not logged in it will give you an error 403
                 context.Result = new ForbidResult();
                 return;
             }
 
-            //Get type from form
+            //Get type of item are you approving
+            //Either Restaurant or MenuItem
             string type = context.HttpContext.Request.Form["type"].ToString();
-
             bool isAuthorized = false;
 
             if (type == "menuitem")
             {
-                //Get the menu item IDs being approved
-                var menuItemIdsStr = context.HttpContext.Request.Form["menuItemIds"];
+                //Checking if the Menu Item can be approved by the user
+                var menuItemIds = context.HttpContext.Request.Form["menuItemIds"];
 
-                if (menuItemIdsStr.Count > 0)
+                if (menuItemIds.Count > 0)
                 {
-                    //Get the first menu item being approved
-                    var firstId = Guid.Parse(menuItemIdsStr[0]);
-                    var menuItem = _menuItemsRepo.Get().FirstOrDefault(m => m.Id == firstId);
-
-                    if (menuItem != null)
-                    {
-                        //Get restaurant directly using RestaurantId
-                        var restaurant = _restaurantsRepo.Get(menuItem.RestaurantId);
-                        if (restaurant != null)
-                        {
-                            isAuthorized = restaurant.OwnerEmailAddress == userEmail;
-                        }
-                    }
+                    // Get first menu item ID and parse it
+                    // Get the restaurant for this menu item
+                    // after checking if the user is the owner
+                    Guid itemId = Guid.Parse(menuItemIds[0]);
+                    var menuItem = _menuItemsRepo.Get().FirstOrDefault(m => m.Id == itemId);                    
+                    var restaurant = _restaurantsRepo.Get(menuItem.RestaurantId);
+                    isAuthorized = (restaurant.OwnerEmailAddress == userEmail);
                 }
             }
-
             else
             {
                 //For restaurants, check if user is site admin
-                var restaurantIdsStr = context.HttpContext.Request.Form["restaurantIds"];
+                var restaurantIds = context.HttpContext.Request.Form["restaurantIds"];
 
-                if (restaurantIdsStr.Count > 0)
+                if (restaurantIds.Count > 0)
                 {
-                    var firstId = int.Parse(restaurantIdsStr[0]);
-                    var restaurant = _restaurantsRepo.Get(firstId);
+                    int restaurantId = int.Parse(restaurantIds[0]);
+                    var restaurant = _restaurantsRepo.Get(restaurantId);
 
-                    if (restaurant != null)
-                    {
-                        isAuthorized = restaurant.GetValidators().Contains(userEmail);
-                    }
+                    //checking fi the email is in the Method GetValidators()
+                    isAuthorized = restaurant.GetValidators().Contains(userEmail);
                 }
             }
 
+            //error 403 forbidden
             if (!isAuthorized)
             {
                 context.Result = new ForbidResult();

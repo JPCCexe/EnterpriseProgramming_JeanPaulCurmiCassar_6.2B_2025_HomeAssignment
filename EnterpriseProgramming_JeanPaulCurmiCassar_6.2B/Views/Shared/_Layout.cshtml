@@ -23,7 +23,7 @@
                             <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
-                        <!-- Everyone can see these -->
+                        <!-- Everyone and Not Logged in users can see these -->
                         <li class="nav-item">
                             <a class="nav-link text-white"
                                asp-controller="ItemsRestaurant"
@@ -40,7 +40,7 @@
                             </a>
                         </li>
 
-                        <!-- Only logged in users can see Verification -->
+                        <!-- Only logged in users can see the Verification Buttons (Either for Menu Items or Restaurants) -->
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">

@@ -22,6 +22,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped(typeof(RestaurantsRepository));
 builder.Services.AddScoped(typeof(MenuItemsRepository));
 
+
 //Register IItemsRepository with keyed services
 builder.Services.AddKeyedScoped<IItemsRepository, ItemsInMemoryRepository>("memory");
 builder.Services.AddKeyedScoped<IItemsRepository, ItemsDbRepository>("db");

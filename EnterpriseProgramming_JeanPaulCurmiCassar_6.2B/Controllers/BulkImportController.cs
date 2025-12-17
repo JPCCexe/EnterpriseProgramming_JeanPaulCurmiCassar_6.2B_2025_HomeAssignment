@@ -22,27 +22,35 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Controllers
         }
 
         [HttpPost]
-        public IActionResult BulkImport(string jsonData,
-            [FromKeyedServices("memory")] IItemsRepository memCache)
+        public IActionResult BulkImport(IFormFile jsonFile,
+        [FromKeyedServices("memory")] IItemsRepository memCache)
         {
-            //Use sample data if empty
-            if (string.IsNullOrWhiteSpace(jsonData))
+            //Check if file was uploaded
+            if (jsonFile == null || jsonFile.Length == 0)
             {
-                jsonData = @"[{""type"":""restaurant"",""name"":""Test Restaurant"",""ownerEmailAddress"":""test@example.com"",""phone"":""123456""}]";
+                ViewBag.Error = "Please upload a JSON file";
+                return View();
             }
 
-            //Parse JSON using factory
+            //Reading the json from file
+            string jsonData = "";
+            using (var reader = new StreamReader(jsonFile.OpenReadStream()))
+            {
+                jsonData = reader.ReadToEnd();
+            }
+
+            //Use the factory to parse json into items
             var factory = new ImportItemFactory();
             var items = factory.Create(jsonData);
 
-            //Save to memory
+            //Saving into the memmory cache
             memCache.Save(items);
 
-            //Generate ZIP
+            //Generate ZIP with folder and default images
             string zipFile = CreateZip(items);
             TempData["Zip"] = zipFile;
 
-            ViewBag.Message = $"Parsed {items.Count} items";
+            ViewBag.Message = $"Parsed {items.Count} items from {jsonFile.FileName}";
             return View("Preview", items);
         }
 
@@ -59,11 +67,11 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Controllers
                 string folderId = "";
                 if (item is Restaurant r)
                 {
-                    folderId = $"restaurant-{Guid.NewGuid()}";
+                    folderId = $"restaurant-{r.Name.Replace(" ", "-").ToLower()}";
                 }
                 else if (item is MenuItem m)
                 {
-                    folderId = $"menuitem-{m.Id}";
+                    folderId = $"menuitem-{m.Title.Replace(" ", "-").ToLower()}";
                 }
                 string itemFolder = Path.Combine(tempFolder, folderId);
                 Directory.CreateDirectory(itemFolder);
@@ -145,22 +153,38 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Controllers
             TempData["success"] = $"Successfully saved {items.Count} items to database!";
             return RedirectToAction("Catalog", "ItemsRestaurant");
         }
-
         private void ProcessZipAndLinkImages(IFormFile zipFile, List<IItemValidating> items)
         {
-            //Create temp folder for extraction
+            // Create images folder if not exists
+            string imagesFolder = Path.Combine(_env.WebRootPath, "images");
+            if (!Directory.Exists(imagesFolder))
+            {
+                Directory.CreateDirectory(imagesFolder);
+            }
+
             string extractPath = Path.Combine(_env.WebRootPath, "temp", Guid.NewGuid().ToString());
             Directory.CreateDirectory(extractPath);
 
-            //Save uploaded ZIP temporarily
+            // Extract the uploaded zip to temp folder
             string zipPath = Path.Combine(extractPath, "upload.zip");
             using (var stream = new FileStream(zipPath, FileMode.Create))
             {
                 zipFile.CopyTo(stream);
             }
 
-            //Extract ZIP
+            //Extract zip
             ZipFile.ExtractToDirectory(zipPath, extractPath);
+
+            //Check if zip extracted to a nested folder
+            var subFolders = Directory.GetDirectories(extractPath);
+            string searchPath = extractPath;
+
+            //If there's only one subfolder, it might be a nested zip structure
+            if (subFolders.Length == 1 && !Path.GetFileName(subFolders[0]).StartsWith("restaurant-")
+                                        && !Path.GetFileName(subFolders[0]).StartsWith("menuitem-"))
+            {
+                searchPath = subFolders[0];
+            }
 
             //Process each item and link images
             foreach (var item in items)
@@ -172,27 +196,28 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Controllers
                 }
                 else if (item is MenuItem m)
                 {
-                    folderName = $"menuitem-{m.Id}";
+                    folderName = $"menuitem-{m.Title.Replace(" ", "-").ToLower()}";
                 }
 
-                string itemFolder = Path.Combine(extractPath, folderName);
+                string itemFolder = Path.Combine(searchPath, folderName);
+
                 if (Directory.Exists(itemFolder))
                 {
-                    //Find image in folder
+                    //Find image in folder and can have any name
                     var imageFiles = Directory.GetFiles(itemFolder, "*.jpg")
                         .Concat(Directory.GetFiles(itemFolder, "*.png"))
+                        .Concat(Directory.GetFiles(itemFolder, "*.jpeg"))
                         .ToArray();
 
                     if (imageFiles.Length > 0)
                     {
-                        
                         string originalFile = imageFiles[0];
                         string uniqueName = $"{Guid.NewGuid().ToString().Substring(0, 8)}{Path.GetExtension(originalFile)}";
                         string destinationPath = Path.Combine(_env.WebRootPath, "images", uniqueName);
 
                         System.IO.File.Copy(originalFile, destinationPath, true);
 
-                        //Link image to item
+                        //Linking the image to item
                         if (item is Restaurant rest)
                         {
                             rest.ImagePath = $"/images/{uniqueName}";

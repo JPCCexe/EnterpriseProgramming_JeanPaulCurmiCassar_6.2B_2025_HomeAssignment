@@ -2,38 +2,24 @@
     ViewData["Title"] = "Bulk Import";
 }
 
-<h2>Bulk Import</h2>
+<div class="container mt-4">
+    <h2>Bulk Import Restaurants & Menu Items</h2>
 
-<p>Paste your JSON data below:</p>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
 
-<form asp-action="BulkImport" method="post">
-    <div class="mb-3">
-        <label>JSON Data:</label>
-        <textarea name="jsonData" rows="10" class="form-control" placeholder="Paste JSON here..."></textarea>
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="BulkImport" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="jsonFile" class="form-label">Select JSON File:</label>
+                    <input type="file" class="form-control" id="jsonFile" name="jsonFile" accept=".json" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Upload & Parse</button>
+            </form>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Import</button>
-</form>
-
-<hr class="my-4" />
-
-<h5>Example JSON:</h5>
-<pre>
-[
-  {
-    "type": "restaurant",
-    "name": "Restaurant Name",
-    "description": "Description",
-    "ownerEmailAddress": "owner@test.com",
-    "address": "Address",
-    "phone": "12345"
-  },
-  {
-    "type": "menuItem",
-    "title": "Dish Name",
-    "price": 10.50,
-    "currency": "EUR",
-    "restaurantId": 1
-  }
-]
-</pre>
+</div>
