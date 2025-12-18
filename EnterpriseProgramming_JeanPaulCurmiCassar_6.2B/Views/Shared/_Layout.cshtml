@@ -40,8 +40,29 @@
                             </a>
                         </li>
 
+                        @inject DataAccess.Context.RestaurantDbContext DbContext
+
+                        @{
+                            var userEmail = User.Identity?.Name?.ToLower();
+                            var canVerifyEmail = false;
+
+                            if (!string.IsNullOrEmpty(userEmail))
+                            {
+                                // Hardcoded admin check
+                                if (userEmail == "adminjeanpaul@mcast.com")
+                                {
+                                    canVerifyEmail = true;
+                                }
+                                else
+                                {
+                                    // Dynamic check
+                                    canVerifyEmail = DbContext.Restaurants.Any(r => r.OwnerEmailAddress.ToLower() == userEmail);
+                                }
+                            }
+                        }
+                        
                         <!-- Only logged in users can see the Verification Buttons (Either for Menu Items or Restaurants) -->
-                        @if (User.Identity.IsAuthenticated)
+                        @if (canVerifyEmail)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-white"

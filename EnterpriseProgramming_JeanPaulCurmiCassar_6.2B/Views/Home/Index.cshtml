@@ -18,8 +18,28 @@
                 Bulk Import
             </a>
         </div>
+    @inject DataAccess.Context.RestaurantDbContext DbContext
 
-        @if (User.Identity.IsAuthenticated)
+    @{
+        var userEmail = User.Identity?.Name?.ToLower();
+        var canVerifyEmail = false;
+
+        if (!string.IsNullOrEmpty(userEmail))
+        {
+            // Hardcoded admin check
+            if (userEmail == "adminjeanpaul@mcast.com")
+            {
+                canVerifyEmail = true;
+            }
+            else
+            {
+                // Dynamic check
+                canVerifyEmail = DbContext.Restaurants.Any(r => r.OwnerEmailAddress.ToLower() == userEmail);
+            }
+        }
+    }
+    
+    @if (canVerifyEmail)
         {
             <div class="mt-4">
                 <a asp-controller="ItemsRestaurant" asp-action="Verification"
