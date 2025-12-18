@@ -31,7 +31,7 @@ builder.Services.AddKeyedScoped<IItemsRepository, ItemsDbRepository>("db");
 builder.Services.AddMemoryCache();
 
 //used to register the filter
-builder.Services.AddScoped<FiltersValidations>();
+builder.Services.AddScoped(typeof(FiltersValidations));
 
 var app = builder.Build();
 

@@ -3,8 +3,6 @@ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Context
 {
@@ -54,6 +52,7 @@ namespace DataAccess.Context
             {
                 _context.Restaurants.Add(restaurant);
             }
+
             //SaveChanges assigns real IDs to restaurants
             _context.SaveChanges(); 
 

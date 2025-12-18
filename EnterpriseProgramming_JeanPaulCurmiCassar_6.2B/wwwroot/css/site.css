@@ -59,16 +59,15 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-    background-color: rgba(255, 255, 255, 0.2); /* light highlight */
+    background-color: rgba(255, 255, 255, 0.2); 
     color: #ffffff;
     ransform: translateY(-1px);
 }
 
 .navbar-nav .nav-link:active {
-    transform: translateY(0); /* remove lift when clicked */
+    transform: translateY(0);
 
 }
-
 
 .card,
 .list-group-item {

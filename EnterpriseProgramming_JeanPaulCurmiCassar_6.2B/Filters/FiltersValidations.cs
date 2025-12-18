@@ -15,6 +15,10 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Filters
             _menuItemsRepo = menuItemsRepo;
         }
 
+        //runs after the execution does into the controller's method
+        public void OnActionExecuted(ActionExecutedContext context) { }
+
+        //runs before the execution goes into the controller's method
         public void OnActionExecuting(ActionExecutingContext context)
         {
             // checking if the user is logged in
@@ -69,7 +73,5 @@ namespace EnterpriseProgramming_JeanPaulCurmiCassar_6._2B.Filters
                 context.Result = new ForbidResult();
             }
         }
-
-        public void OnActionExecuted(ActionExecutedContext context) { }
     }
 }
