@@ -1,10 +1,11 @@
-﻿using Domain.Interfaces;
+﻿using DataAccess.Context;
+using Domain.Interfaces;
 using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataAccess.Context
+namespace DataAccess.Repositories
 {
     public class ItemsDbRepository : IItemsRepository
     {
